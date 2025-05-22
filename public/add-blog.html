@@ -1,0 +1,209 @@
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Blog</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    /* Container form */
+    .form-container {
+      background-color: #fff;
+      padding: 40px 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+    }
+
+    /* Heading in add _dash */
+    .form-container h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    /* Input fields */
+    .form-container input[type="text"],
+    .form-container textarea {
+      width: 100%;
+      padding: 12px 15px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      resize: vertical;
+    }
+
+    /* submit button  collor effect*/
+    .form-container button {
+      width: 100%;
+      padding: 12px 15px;
+      background-color: #4CAF50;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    /* button hover effect  collor */
+    .form-container button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h1>Add New Blog</h1>
+    <form id="addBlogForm">
+      <input type="text" id="title" placeholder="Title" required />
+      <textarea id="content" placeholder="Content" rows="6" required></textarea>
+      <button type="submit">Add Blog</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('addBlogForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById('title').value;
+      const content = document.getElementById('content').value;
+
+      const response = await fetch('/api/blogs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, content })
+      });
+
+      if (response.ok) {
+        window.location.href = 'dashboard.html';
+      } else {
+        alert('Failed to add blog');
+      }
+    });
+  </script>
+</body>
+</html>
+ -->
+
+
+
+
+
+
+
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Blog</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .form-container {
+      background-color: #fff;
+      padding: 40px 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .form-container h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .form-container input[type="text"],
+    .form-container textarea,
+    .form-container input[type="file"] {
+      width: 100%;
+      padding: 12px 15px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      resize: vertical;
+    }
+
+    .form-container button {
+      width: 100%;
+      padding: 12px 15px;
+      background-color: #4CAF50;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .form-container button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h1>Add New Blog</h1>
+    <form id="addBlogForm" enctype="multipart/form-data">
+      <input type="text" name="title" placeholder="Title" required />
+      <textarea name="description" placeholder="Description" rows="6" required></textarea>
+      <input type="file" name="image" accept="image/*" />
+      <button type="submit">Add Blog</button>
+    </form>
+  </div>
+
+  <script>
+    const addBlogForm = document.getElementById('addBlogForm');
+
+    addBlogForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(addBlogForm);
+      const userId = localStorage.getItem('userId');
+      formData.append('userId', userId); // Attach logged-in user ID
+
+      const response = await fetch('/api/blogs/add', {
+        method: 'POST',
+        body: formData
+      });
+
+      const msg = await response.text();
+      alert(msg);
+
+      if (response.ok) {
+        window.location.href = 'dashboard.html';
+      }
+    });
+  </script>
+</body>
+</html>

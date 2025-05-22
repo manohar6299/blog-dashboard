@@ -1,0 +1,242 @@
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Blog</title>
+  <style>
+    /* Reset default styles  with css*/
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Body styling  CSS*/
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    /* Container  form */
+    .form-container {
+      background-color: #fff;
+      padding: 40px 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+    }
+
+    /* Heading */
+    .form-container h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    /* Input textarea */
+    .form-container input[type="text"],
+    .form-container textarea {
+      width: 100%;
+      padding: 12px 15px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      resize: vertical;
+    }
+
+    /* Submit button in edit  */
+    .form-container button {
+      width: 100%;
+      padding: 12px 15px;
+      background-color: #4CAF50;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    /* Button hover  */
+    .form-container button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h1>Edit Blog</h1>
+    <form id="editBlogForm">
+      <input type="text" id="title" placeholder="Title" required />
+      <textarea id="content" placeholder="Content" rows="6" required></textarea>
+      <button type="submit">Update Blog</button>
+    </form>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const blogId = params.get('id');
+
+    // fetch exist blog
+    fetch(`/api/blogs`)
+      .then(res => res.json())
+      .then(blogs => {
+        const blog = blogs.find(b => b.id == blogId);
+        if (blog) {
+          document.getElementById('title').value = blog.title;
+          document.getElementById('content').value = blog.content;
+        } else {
+          alert('Blog not found');
+          window.location.href = 'dashboard.html';
+        }
+      });
+
+    document.getElementById('editBlogForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById('title').value;
+      const content = document.getElementById('content').value;
+
+      const response = await fetch(`/api/blogs/${blogId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, content })
+      });
+
+      if (response.ok) {
+        window.location.href = 'dashboard.html';
+      } else {
+        alert('Failed to update blog');
+      }
+    });
+  </script>
+</body>
+</html>
+ -->
+
+
+
+
+
+
+
+
+
+
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Blog</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .form-container {
+      background-color: #fff;
+      padding: 40px 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .form-container h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .form-container input[type="text"],
+    .form-container textarea,
+    .form-container input[type="file"] {
+      width: 100%;
+      padding: 12px 15px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      resize: vertical;
+    }
+
+    .form-container button {
+      width: 100%;
+      padding: 12px 15px;
+      background-color: #4CAF50;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .form-container button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h1>Edit Blog</h1>
+    <form id="editBlogForm" enctype="multipart/form-data">
+      <input type="text" name="title" id="title" placeholder="Title" required />
+      <textarea name="description" id="description" placeholder="Description" rows="6" required></textarea>
+      <input type="file" name="image" id="image" accept="image/*" />
+      <button type="submit">Update Blog</button>
+    </form>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const blogId = params.get('id');
+
+    // Fetch blog details by ID
+    fetch(`/api/blogs/view/${blogId}`)
+      .then(res => res.json())
+      .then(blog => {
+        if (blog) {
+          document.getElementById('title').value = blog.title;
+          document.getElementById('description').value = blog.description;
+        } else {
+          alert('Blog not found');
+          window.location.href = 'dashboard.html';
+        }
+      });
+
+    // Submit updated blog data
+    document.getElementById('editBlogForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const form = document.getElementById('editBlogForm');
+      const formData = new FormData(form);
+
+      const res = await fetch(`/api/blogs/edit/${blogId}`, {
+        method: 'PUT',
+        body: formData
+      });
+
+      const msg = await res.text();
+      alert(msg);
+
+      if (res.ok) {
+        window.location.href = 'dashboard.html';
+      }
+    });
+  </script>
+</body>
+</html>
